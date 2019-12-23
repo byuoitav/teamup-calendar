@@ -2,7 +2,7 @@ package teamup
 
 import "time"
 
-type Event struct {
+type event struct {
 	ID                 string    `json:"id"`
 	RemoteID           string    `json:"remote_id"`
 	SeriesID           string    `json:"series_id"`
@@ -25,21 +25,9 @@ type Event struct {
 	UpdateDate         time.Time `json:"update_dt"`
 }
 
-func (e *Event) GetTitle() string {
-	return e.Title
-}
-
-func (e *Event) GetStartTime() time.Time {
-	return e.StartDate
-}
-
-func (e *Event) GetEndTime() time.Time {
-	return e.EndDate
-}
-
 //eventResponse represents the json object returned by the TeamUp API events get request
 type eventResponse struct {
-	Events    []Event `json:"events"`
+	Events    []event `json:"events"`
 	TimeStamp int     `json:"timestamp"`
 }
 

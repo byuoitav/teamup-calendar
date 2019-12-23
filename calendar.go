@@ -8,7 +8,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
-	"time"
+
+	"github.com/byuoitav/scheduler/calendars"
 )
 
 type Calendar struct {
@@ -21,7 +22,7 @@ type Calendar struct {
 	RoomID string
 }
 
-func (c *Calendar) GetEvents(ctx context.Context) ([]Event, error) {
+func (c *Calendar) GetEvents(ctx context.Context) ([]calendars.Event, error) {
 	subCalID, err := c.GetSubcalendarID(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("unable to get subcalendar id: %s", err)
@@ -59,10 +60,19 @@ func (c *Calendar) GetEvents(ctx context.Context) ([]Event, error) {
 		return nil, fmt.Errorf("error unmarshalling json event data: %w", err)
 	}
 
-	return eventResponse.Events, nil
+	var events []calendars.Event
+	for _, event := range eventResponse.Events {
+		events = append(events, calendars.Event{
+			Title:     event.Title,
+			StartTime: event.StartDate,
+			EndTime:   event.EndDate,
+		})
+	}
+
+	return events, nil
 }
 
-func (c *Calendar) CreateEvent(ctx context.Context, title string, startTime, endTime time.Time) error {
+func (c *Calendar) CreateEvent(ctx context.Context, event calendars.Event) error {
 	subCalID, err := c.GetSubcalendarID(ctx)
 	if err != nil {
 		return fmt.Errorf("unable to get subcalendar id: %s", err)
@@ -71,9 +81,9 @@ func (c *Calendar) CreateEvent(ctx context.Context, title string, startTime, end
 	// Translate event to team up event
 	teamUpEvent := eventSend{
 		SubCalendarID: subCalID,
-		Title:         title,
-		StartDate:     startTime,
-		EndDate:       endTime,
+		Title:         event.Title,
+		StartDate:     event.StartTime,
+		EndDate:       event.EndTime,
 	}
 
 	reqBody, err := json.Marshal(teamUpEvent)
