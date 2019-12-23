@@ -145,14 +145,15 @@ func (c *Calendar) GetSubcalendarID(ctx context.Context) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	fmt.Printf("\nbody: %s\n\n", body)
+
+	if resp.StatusCode/100 != 2 {
+		return 0, fmt.Errorf("invalid response, status code %v: %s", resp.StatusCode, body)
+	}
 
 	var subcalResponse subcalendarList
 	if err := json.Unmarshal(body, &subcalResponse); err != nil {
-		return 0, fmt.Errorf("Error unmarshalling json: %w", err)
+		return 0, fmt.Errorf("error unmarshalling json: %w", err)
 	}
-
-	fmt.Printf("\nsubcalendars: %v\n", subcalResponse)
 
 	for _, subCal := range subcalResponse.Subcalendars {
 		if subCal.Name == c.RoomID {
