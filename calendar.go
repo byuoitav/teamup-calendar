@@ -82,8 +82,8 @@ func (c *Calendar) CreateEvent(ctx context.Context, event calendars.Event) error
 	teamUpEvent := eventSend{
 		SubCalendarID: subCalID,
 		Title:         event.Title,
-		StartDate:     event.StartTime,
-		EndDate:       event.EndTime,
+		StartDate:     event.StartTime.Format("2006-01-02T15:04:05-0700"),
+		EndDate:       event.EndTime.Format("2006-01-02T15:04:05-0700"),
 	}
 
 	reqBody, err := json.Marshal(teamUpEvent)
