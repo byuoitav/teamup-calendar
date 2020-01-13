@@ -33,15 +33,15 @@ type eventResponse struct {
 
 //eventSend represents the event data to be sent to the TeamUp API
 type eventSend struct {
-	SubCalendarID int       `json:"subcalendar_id"`
-	StartDate     time.Time `json:"start_dt"`
-	EndDate       time.Time `json:"end_dt"`
-	AllDay        bool      `json:"all_day"`
-	RecurRule     string    `json:"rrule"`
-	Title         string    `json:"title"`
-	Who           string    `json:"who"`
-	Location      string    `json:"location"`
-	Notes         string    `json:"notes"`
+	SubCalendarID int    `json:"subcalendar_id"`
+	StartDate     string `json:"start_dt"`
+	EndDate       string `json:"end_dt"`
+	AllDay        bool   `json:"all_day"`
+	RecurRule     string `json:"rrule"`
+	Title         string `json:"title"`
+	Who           string `json:"who"`
+	Location      string `json:"location"`
+	Notes         string `json:"notes"`
 }
 
 //subcalendarList holds a list of subcalendars
